@@ -47,6 +47,7 @@ class ServerIf {
   virtual void Browser_GetURL(std::string& _return, const int32_t bid) = 0;
   virtual void Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line) = 0;
   virtual void Browser_WasResized(const int32_t bid) = 0;
+  virtual void Browser_WasHidden(const int32_t bid, const bool hidden) = 0;
   virtual void Browser_NotifyScreenInfoChanged(const int32_t bid) = 0;
   virtual void Browser_Invalidate(const int32_t bid) = 0;
   virtual void Browser_SendCefKeyEvent(const int32_t bid, const CefKeyEventAttributes& event) = 0;
@@ -258,6 +259,9 @@ class ServerNull : virtual public ServerIf {
     return;
   }
   void Browser_WasResized(const int32_t /* bid */) override {
+    return;
+  }
+  void Browser_WasHidden(const int32_t /* bid */, const bool /* hidden */) override {
     return;
   }
   void Browser_NotifyScreenInfoChanged(const int32_t /* bid */) override {
@@ -2479,6 +2483,64 @@ class Server_Browser_WasResized_pargs {
 
   virtual ~Server_Browser_WasResized_pargs() noexcept;
   const int32_t* bid;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _Server_Browser_WasHidden_args__isset {
+  _Server_Browser_WasHidden_args__isset() : bid(false), hidden(false) {}
+  bool bid :1;
+  bool hidden :1;
+} _Server_Browser_WasHidden_args__isset;
+
+class Server_Browser_WasHidden_args {
+ public:
+
+  Server_Browser_WasHidden_args(const Server_Browser_WasHidden_args&) noexcept;
+  Server_Browser_WasHidden_args& operator=(const Server_Browser_WasHidden_args&) noexcept;
+  Server_Browser_WasHidden_args() noexcept
+                                : bid(0),
+                                  hidden(0) {
+  }
+
+  virtual ~Server_Browser_WasHidden_args() noexcept;
+  int32_t bid;
+  bool hidden;
+
+  _Server_Browser_WasHidden_args__isset __isset;
+
+  void __set_bid(const int32_t val);
+
+  void __set_hidden(const bool val);
+
+  bool operator == (const Server_Browser_WasHidden_args & rhs) const
+  {
+    if (!(bid == rhs.bid))
+      return false;
+    if (!(hidden == rhs.hidden))
+      return false;
+    return true;
+  }
+  bool operator != (const Server_Browser_WasHidden_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const Server_Browser_WasHidden_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class Server_Browser_WasHidden_pargs {
+ public:
+
+
+  virtual ~Server_Browser_WasHidden_pargs() noexcept;
+  const int32_t* bid;
+  const bool* hidden;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -11231,6 +11293,8 @@ class ServerClient : virtual public ServerIf {
   void send_Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line);
   void Browser_WasResized(const int32_t bid) override;
   void send_Browser_WasResized(const int32_t bid);
+  void Browser_WasHidden(const int32_t bid, const bool hidden) override;
+  void send_Browser_WasHidden(const int32_t bid, const bool hidden);
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override;
   void send_Browser_NotifyScreenInfoChanged(const int32_t bid);
   void Browser_Invalidate(const int32_t bid) override;
@@ -11538,6 +11602,7 @@ class ServerProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_Browser_GetURL(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_ExecuteJavaScript(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_WasResized(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_Browser_WasHidden(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_NotifyScreenInfoChanged(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_Invalidate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_SendCefKeyEvent(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -11671,6 +11736,7 @@ class ServerProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["Browser_GetURL"] = &ServerProcessor::process_Browser_GetURL;
     processMap_["Browser_ExecuteJavaScript"] = &ServerProcessor::process_Browser_ExecuteJavaScript;
     processMap_["Browser_WasResized"] = &ServerProcessor::process_Browser_WasResized;
+    processMap_["Browser_WasHidden"] = &ServerProcessor::process_Browser_WasHidden;
     processMap_["Browser_NotifyScreenInfoChanged"] = &ServerProcessor::process_Browser_NotifyScreenInfoChanged;
     processMap_["Browser_Invalidate"] = &ServerProcessor::process_Browser_Invalidate;
     processMap_["Browser_SendCefKeyEvent"] = &ServerProcessor::process_Browser_SendCefKeyEvent;
@@ -12030,6 +12096,15 @@ class ServerMultiface : virtual public ServerIf {
       ifaces_[i]->Browser_WasResized(bid);
     }
     ifaces_[i]->Browser_WasResized(bid);
+  }
+
+  void Browser_WasHidden(const int32_t bid, const bool hidden) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->Browser_WasHidden(bid, hidden);
+    }
+    ifaces_[i]->Browser_WasHidden(bid, hidden);
   }
 
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override {
@@ -13091,6 +13166,8 @@ class ServerConcurrentClient : virtual public ServerIf {
   void send_Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line);
   void Browser_WasResized(const int32_t bid) override;
   void send_Browser_WasResized(const int32_t bid);
+  void Browser_WasHidden(const int32_t bid, const bool hidden) override;
+  void send_Browser_WasHidden(const int32_t bid, const bool hidden);
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override;
   void send_Browser_NotifyScreenInfoChanged(const int32_t bid);
   void Browser_Invalidate(const int32_t bid) override;

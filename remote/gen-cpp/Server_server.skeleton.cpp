@@ -145,6 +145,11 @@ class ServerHandler : virtual public ServerIf {
     printf("Browser_WasResized\n");
   }
 
+  void Browser_WasHidden(const int32_t bid, const bool hidden) {
+    // Your implementation goes here
+    printf("Browser_WasHidden\n");
+  }
+
   void Browser_NotifyScreenInfoChanged(const int32_t bid) {
     // Your implementation goes here
     printf("Browser_NotifyScreenInfoChanged\n");

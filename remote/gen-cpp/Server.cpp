@@ -3267,6 +3267,101 @@ uint32_t Server_Browser_WasResized_pargs::write(::apache::thrift::protocol::TPro
 }
 
 
+Server_Browser_WasHidden_args::~Server_Browser_WasHidden_args() noexcept {
+}
+
+
+uint32_t Server_Browser_WasHidden_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->bid);
+          this->__isset.bid = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->hidden);
+          this->__isset.hidden = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t Server_Browser_WasHidden_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_WasHidden_args");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->bid);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("hidden", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->hidden);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+Server_Browser_WasHidden_pargs::~Server_Browser_WasHidden_pargs() noexcept {
+}
+
+
+uint32_t Server_Browser_WasHidden_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("Server_Browser_WasHidden_pargs");
+
+  xfer += oprot->writeFieldBegin("bid", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32((*(this->bid)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("hidden", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->hidden)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
 Server_Browser_NotifyScreenInfoChanged_args::~Server_Browser_NotifyScreenInfoChanged_args() noexcept {
 }
 
@@ -19786,6 +19881,26 @@ void ServerClient::send_Browser_WasResized(const int32_t bid)
   oprot_->getTransport()->flush();
 }
 
+void ServerClient::Browser_WasHidden(const int32_t bid, const bool hidden)
+{
+  send_Browser_WasHidden(bid, hidden);
+}
+
+void ServerClient::send_Browser_WasHidden(const int32_t bid, const bool hidden)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("Browser_WasHidden", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_WasHidden_pargs args;
+  args.bid = &bid;
+  args.hidden = &hidden;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
 void ServerClient::Browser_NotifyScreenInfoChanged(const int32_t bid)
 {
   send_Browser_NotifyScreenInfoChanged(bid);
@@ -25110,6 +25225,43 @@ void ServerProcessor::process_Browser_WasResized(int32_t, ::apache::thrift::prot
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->asyncComplete(ctx, "Server.Browser_WasResized");
+  }
+
+  return;
+}
+
+void ServerProcessor::process_Browser_WasHidden(int32_t, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol*, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("Server.Browser_WasHidden", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "Server.Browser_WasHidden");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "Server.Browser_WasHidden");
+  }
+
+  Server_Browser_WasHidden_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "Server.Browser_WasHidden", bytes);
+  }
+
+  try {
+    iface_->Browser_WasHidden(args.bid, args.hidden);
+  } catch (const std::exception&) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "Server.Browser_WasHidden");
+    }
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->asyncComplete(ctx, "Server.Browser_WasHidden");
   }
 
   return;
@@ -31167,6 +31319,29 @@ void ServerConcurrentClient::send_Browser_WasResized(const int32_t bid)
 
   Server_Browser_WasResized_pargs args;
   args.bid = &bid;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+}
+
+void ServerConcurrentClient::Browser_WasHidden(const int32_t bid, const bool hidden)
+{
+  send_Browser_WasHidden(bid, hidden);
+}
+
+void ServerConcurrentClient::send_Browser_WasHidden(const int32_t bid, const bool hidden)
+{
+  int32_t cseqid = 0;
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("Browser_WasHidden", ::apache::thrift::protocol::T_ONEWAY, cseqid);
+
+  Server_Browser_WasHidden_pargs args;
+  args.bid = &bid;
+  args.hidden = &hidden;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
