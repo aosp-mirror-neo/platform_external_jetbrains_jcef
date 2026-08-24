@@ -395,6 +395,14 @@ JNIEXPORT void JNICALL Java_org_cef_browser_CefBrowser_1N_N_1NotifyScreenInfoCha
 
 /*
  * Class:     org_cef_browser_CefBrowser_N
+ * Method:    N_SendExternalBeginFrame
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_cef_browser_CefBrowser_1N_N_1SendExternalBeginFrame
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_cef_browser_CefBrowser_N
  * Method:    N_SendKeyEvent
  * Signature: (Ljava/awt/event/KeyEvent;)V
  */

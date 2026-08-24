@@ -476,6 +476,14 @@ void ServerHandler::Browser_Invalidate(const int32_t bid) {
   browser->GetHost()->Invalidate(PET_VIEW);;
 }
 
+void ServerHandler::Browser_SendExternalBeginFrame(const int32_t bid) {
+  MEASURE;
+  if (doTraceBrowser && Log::isTraceEnabled())
+    Log::trace("ServerHandler: Browser_SendExternalBeginFrame, bid=%d", bid);
+  GET_BROWSER_OR_RETURN()
+  browser->GetHost()->SendExternalBeginFrame();
+}
+
 extern void processKeyEvent(
     CefKeyEvent & cef_event,
     int event_type, // event.getID()

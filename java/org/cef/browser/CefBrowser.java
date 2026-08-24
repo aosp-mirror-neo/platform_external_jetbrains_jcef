@@ -408,6 +408,11 @@ public interface CefBrowser {
     void notifyScreenInfoChanged();
 
     /**
+     * Issue a BeginFrame request.
+     */
+    void sendExternalBeginFrame();
+
+    /**
      * @since api-1.2
      */
     void sendKeyEvent(KeyEvent e);

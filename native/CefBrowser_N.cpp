@@ -1276,6 +1276,13 @@ void Java_org_cef_browser_CefBrowser_1N_N_1NotifyScreenInfoChanged(JNIEnv* env,
   browser->GetHost()->NotifyScreenInfoChanged();
 }
 
+JNIEXPORT void JNICALL
+Java_org_cef_browser_CefBrowser_1N_N_1SendExternalBeginFrame(JNIEnv* env,
+                                                             jobject obj) {
+  CefRefPtr<CefBrowser> browser = JNI_GET_BROWSER_OR_RETURN(env, obj);
+  browser->GetHost()->SendExternalBeginFrame();
+}
+
 namespace {
 
 bool GetJNIRange(JNIEnv* env, jobject obj, CefRange& range) {

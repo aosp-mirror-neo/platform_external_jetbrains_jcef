@@ -811,6 +811,17 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
         }
     }
 
+    @Override
+    public void sendExternalBeginFrame() {
+        try {
+            checkNativeCtxInitialized();
+            if (isNativeCtxInitialized_)
+                N_SendExternalBeginFrame();
+        } catch (UnsatisfiedLinkError ule) {
+            ule.printStackTrace();
+        }
+    }
+
     /**
      * Invalidate the UI.
      */
@@ -1151,6 +1162,7 @@ abstract class CefBrowser_N extends CefNativeAdapter implements CefBrowser, CefA
     private final native void N_WasResized(int width, int height);
     private final native void N_Invalidate();
     private final native void N_NotifyScreenInfoChanged();
+    private final native void N_SendExternalBeginFrame();
     private final native void N_SendKeyEvent(KeyEvent e);
     private final native void N_SendTouchEvent(CefTouchEvent e);
     private final native void N_SendMouseEvent(MouseEvent e);

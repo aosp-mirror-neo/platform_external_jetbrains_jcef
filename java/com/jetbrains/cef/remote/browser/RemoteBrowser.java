@@ -695,6 +695,16 @@ public class RemoteBrowser implements CefBrowser {
     }
 
     @Override
+    public void sendExternalBeginFrame() {
+        if (myIsClosing)
+            return;
+
+        myDelayed.runOrDelay(()->{
+            myRpc.invokeLater(s -> s.Browser_SendExternalBeginFrame(myBid));
+        }, "sendExternalBeginFrame");
+    }
+
+    @Override
     public void sendKeyEvent(KeyEvent e) {
         if (myBid < 0) {
             CefLog.Debug("Skip sendKeyEvent because remote browser wasn't created, bid=%d", myBid);

@@ -155,6 +155,11 @@ class ServerHandler : virtual public ServerIf {
     printf("Browser_Invalidate\n");
   }
 
+  void Browser_SendExternalBeginFrame(const int32_t bid) {
+    // Your implementation goes here
+    printf("Browser_SendExternalBeginFrame\n");
+  }
+
   void Browser_SendCefKeyEvent(const int32_t bid, const CefKeyEventAttributes& event) {
     // Your implementation goes here
     printf("Browser_SendCefKeyEvent\n");
