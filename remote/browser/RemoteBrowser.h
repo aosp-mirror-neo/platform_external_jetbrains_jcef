@@ -24,7 +24,7 @@ public:
 
   CefRefPtr<CefBrowser> getCefBrowser() const;
 
-  void startNativeBrowserCreation(const std::string& url);
+  void startNativeBrowserCreation(const std::string& url, int windowlessFrameRate, bool sharedTexturesEnabled);
   void openDevTools(int x, int y);
 
   void close();
@@ -57,6 +57,9 @@ private:
   SharedBufferManager myPopup;
   CefRefPtr<CefBrowser> myCefBrowser;
   bool myIsClosing = false;
+
+  int myWindowlessFrameRate = 0;
+  bool mySharedTexturesEnabled = false;
 
   static std::mutex ourBid2BrowserMutex;
   static std::map<int, std::shared_ptr<RemoteBrowser>> ourBid2Browser;

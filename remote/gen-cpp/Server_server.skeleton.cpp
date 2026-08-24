@@ -90,7 +90,7 @@ class ServerHandler : virtual public ServerIf {
     printf("Browser_Create\n");
   }
 
-  void Browser_StartNativeCreation(const int32_t bid, const std::string& url) {
+  void Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings) {
     // Your implementation goes here
     printf("Browser_StartNativeCreation\n");
   }
@@ -143,11 +143,6 @@ class ServerHandler : virtual public ServerIf {
   void Browser_WasResized(const int32_t bid) {
     // Your implementation goes here
     printf("Browser_WasResized\n");
-  }
-
-  void Browser_WasHidden(const int32_t bid, const bool hidden) {
-    // Your implementation goes here
-    printf("Browser_WasHidden\n");
   }
 
   void Browser_NotifyScreenInfoChanged(const int32_t bid) {

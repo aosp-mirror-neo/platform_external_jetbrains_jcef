@@ -36,7 +36,7 @@ class ServerIf {
   virtual void Client_AddMessageRouter(const int32_t cid, const  ::thrift_codegen::RObject& msgRouter) = 0;
   virtual void Client_RemoveMessageRouter(const int32_t cid, const  ::thrift_codegen::RObject& msgRouter) = 0;
   virtual int32_t Browser_Create(const int32_t cid, const  ::thrift_codegen::RObject& requestContext) = 0;
-  virtual void Browser_StartNativeCreation(const int32_t bid, const std::string& url) = 0;
+  virtual void Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings) = 0;
   virtual void Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y) = 0;
   virtual void Browser_Close(const int32_t bid) = 0;
   virtual void Browser_CloseDevTools(const int32_t bid) = 0;
@@ -47,7 +47,6 @@ class ServerIf {
   virtual void Browser_GetURL(std::string& _return, const int32_t bid) = 0;
   virtual void Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line) = 0;
   virtual void Browser_WasResized(const int32_t bid) = 0;
-  virtual void Browser_WasHidden(const int32_t bid, const bool hidden) = 0;
   virtual void Browser_NotifyScreenInfoChanged(const int32_t bid) = 0;
   virtual void Browser_Invalidate(const int32_t bid) = 0;
   virtual void Browser_SendCefKeyEvent(const int32_t bid, const CefKeyEventAttributes& event) = 0;
@@ -228,7 +227,7 @@ class ServerNull : virtual public ServerIf {
     int32_t _return = 0;
     return _return;
   }
-  void Browser_StartNativeCreation(const int32_t /* bid */, const std::string& /* url */) override {
+  void Browser_StartNativeCreation(const int32_t /* bid */, const std::string& /* url */, const  ::thrift_codegen::BrowserSettings& /* settings */) override {
     return;
   }
   void Browser_OpenDevTools(const int32_t /* bid */, const int32_t /* x */, const int32_t /* y */) override {
@@ -259,9 +258,6 @@ class ServerNull : virtual public ServerIf {
     return;
   }
   void Browser_WasResized(const int32_t /* bid */) override {
-    return;
-  }
-  void Browser_WasHidden(const int32_t /* bid */, const bool /* hidden */) override {
     return;
   }
   void Browser_NotifyScreenInfoChanged(const int32_t /* bid */) override {
@@ -1783,9 +1779,10 @@ class Server_Browser_Create_presult {
 };
 
 typedef struct _Server_Browser_StartNativeCreation_args__isset {
-  _Server_Browser_StartNativeCreation_args__isset() : bid(false), url(false) {}
+  _Server_Browser_StartNativeCreation_args__isset() : bid(false), url(false), settings(false) {}
   bool bid :1;
   bool url :1;
+  bool settings :1;
 } _Server_Browser_StartNativeCreation_args__isset;
 
 class Server_Browser_StartNativeCreation_args {
@@ -1801,6 +1798,7 @@ class Server_Browser_StartNativeCreation_args {
   virtual ~Server_Browser_StartNativeCreation_args() noexcept;
   int32_t bid;
   std::string url;
+   ::thrift_codegen::BrowserSettings settings;
 
   _Server_Browser_StartNativeCreation_args__isset __isset;
 
@@ -1808,11 +1806,15 @@ class Server_Browser_StartNativeCreation_args {
 
   void __set_url(const std::string& val);
 
+  void __set_settings(const  ::thrift_codegen::BrowserSettings& val);
+
   bool operator == (const Server_Browser_StartNativeCreation_args & rhs) const
   {
     if (!(bid == rhs.bid))
       return false;
     if (!(url == rhs.url))
+      return false;
+    if (!(settings == rhs.settings))
       return false;
     return true;
   }
@@ -1835,6 +1837,7 @@ class Server_Browser_StartNativeCreation_pargs {
   virtual ~Server_Browser_StartNativeCreation_pargs() noexcept;
   const int32_t* bid;
   const std::string* url;
+  const  ::thrift_codegen::BrowserSettings* settings;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2483,64 +2486,6 @@ class Server_Browser_WasResized_pargs {
 
   virtual ~Server_Browser_WasResized_pargs() noexcept;
   const int32_t* bid;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _Server_Browser_WasHidden_args__isset {
-  _Server_Browser_WasHidden_args__isset() : bid(false), hidden(false) {}
-  bool bid :1;
-  bool hidden :1;
-} _Server_Browser_WasHidden_args__isset;
-
-class Server_Browser_WasHidden_args {
- public:
-
-  Server_Browser_WasHidden_args(const Server_Browser_WasHidden_args&) noexcept;
-  Server_Browser_WasHidden_args& operator=(const Server_Browser_WasHidden_args&) noexcept;
-  Server_Browser_WasHidden_args() noexcept
-                                : bid(0),
-                                  hidden(0) {
-  }
-
-  virtual ~Server_Browser_WasHidden_args() noexcept;
-  int32_t bid;
-  bool hidden;
-
-  _Server_Browser_WasHidden_args__isset __isset;
-
-  void __set_bid(const int32_t val);
-
-  void __set_hidden(const bool val);
-
-  bool operator == (const Server_Browser_WasHidden_args & rhs) const
-  {
-    if (!(bid == rhs.bid))
-      return false;
-    if (!(hidden == rhs.hidden))
-      return false;
-    return true;
-  }
-  bool operator != (const Server_Browser_WasHidden_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const Server_Browser_WasHidden_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class Server_Browser_WasHidden_pargs {
- public:
-
-
-  virtual ~Server_Browser_WasHidden_pargs() noexcept;
-  const int32_t* bid;
-  const bool* hidden;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -11269,8 +11214,8 @@ class ServerClient : virtual public ServerIf {
   int32_t Browser_Create(const int32_t cid, const  ::thrift_codegen::RObject& requestContext) override;
   void send_Browser_Create(const int32_t cid, const  ::thrift_codegen::RObject& requestContext);
   int32_t recv_Browser_Create();
-  void Browser_StartNativeCreation(const int32_t bid, const std::string& url) override;
-  void send_Browser_StartNativeCreation(const int32_t bid, const std::string& url);
+  void Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings) override;
+  void send_Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings);
   void Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y) override;
   void send_Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y);
   void Browser_Close(const int32_t bid) override;
@@ -11293,8 +11238,6 @@ class ServerClient : virtual public ServerIf {
   void send_Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line);
   void Browser_WasResized(const int32_t bid) override;
   void send_Browser_WasResized(const int32_t bid);
-  void Browser_WasHidden(const int32_t bid, const bool hidden) override;
-  void send_Browser_WasHidden(const int32_t bid, const bool hidden);
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override;
   void send_Browser_NotifyScreenInfoChanged(const int32_t bid);
   void Browser_Invalidate(const int32_t bid) override;
@@ -11602,7 +11545,6 @@ class ServerProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_Browser_GetURL(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_ExecuteJavaScript(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_WasResized(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_Browser_WasHidden(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_NotifyScreenInfoChanged(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_Invalidate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_Browser_SendCefKeyEvent(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -11736,7 +11678,6 @@ class ServerProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["Browser_GetURL"] = &ServerProcessor::process_Browser_GetURL;
     processMap_["Browser_ExecuteJavaScript"] = &ServerProcessor::process_Browser_ExecuteJavaScript;
     processMap_["Browser_WasResized"] = &ServerProcessor::process_Browser_WasResized;
-    processMap_["Browser_WasHidden"] = &ServerProcessor::process_Browser_WasHidden;
     processMap_["Browser_NotifyScreenInfoChanged"] = &ServerProcessor::process_Browser_NotifyScreenInfoChanged;
     processMap_["Browser_Invalidate"] = &ServerProcessor::process_Browser_Invalidate;
     processMap_["Browser_SendCefKeyEvent"] = &ServerProcessor::process_Browser_SendCefKeyEvent;
@@ -11998,13 +11939,13 @@ class ServerMultiface : virtual public ServerIf {
     return ifaces_[i]->Browser_Create(cid, requestContext);
   }
 
-  void Browser_StartNativeCreation(const int32_t bid, const std::string& url) override {
+  void Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->Browser_StartNativeCreation(bid, url);
+      ifaces_[i]->Browser_StartNativeCreation(bid, url, settings);
     }
-    ifaces_[i]->Browser_StartNativeCreation(bid, url);
+    ifaces_[i]->Browser_StartNativeCreation(bid, url, settings);
   }
 
   void Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y) override {
@@ -12096,15 +12037,6 @@ class ServerMultiface : virtual public ServerIf {
       ifaces_[i]->Browser_WasResized(bid);
     }
     ifaces_[i]->Browser_WasResized(bid);
-  }
-
-  void Browser_WasHidden(const int32_t bid, const bool hidden) override {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->Browser_WasHidden(bid, hidden);
-    }
-    ifaces_[i]->Browser_WasHidden(bid, hidden);
   }
 
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override {
@@ -13142,8 +13074,8 @@ class ServerConcurrentClient : virtual public ServerIf {
   int32_t Browser_Create(const int32_t cid, const  ::thrift_codegen::RObject& requestContext) override;
   int32_t send_Browser_Create(const int32_t cid, const  ::thrift_codegen::RObject& requestContext);
   int32_t recv_Browser_Create(const int32_t seqid);
-  void Browser_StartNativeCreation(const int32_t bid, const std::string& url) override;
-  void send_Browser_StartNativeCreation(const int32_t bid, const std::string& url);
+  void Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings) override;
+  void send_Browser_StartNativeCreation(const int32_t bid, const std::string& url, const  ::thrift_codegen::BrowserSettings& settings);
   void Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y) override;
   void send_Browser_OpenDevTools(const int32_t bid, const int32_t x, const int32_t y);
   void Browser_Close(const int32_t bid) override;
@@ -13166,8 +13098,6 @@ class ServerConcurrentClient : virtual public ServerIf {
   void send_Browser_ExecuteJavaScript(const int32_t bid, const std::string& code, const std::string& url, const int32_t line);
   void Browser_WasResized(const int32_t bid) override;
   void send_Browser_WasResized(const int32_t bid);
-  void Browser_WasHidden(const int32_t bid, const bool hidden) override;
-  void send_Browser_WasHidden(const int32_t bid, const bool hidden);
   void Browser_NotifyScreenInfoChanged(const int32_t bid) override;
   void send_Browser_NotifyScreenInfoChanged(const int32_t bid);
   void Browser_Invalidate(const int32_t bid) override;

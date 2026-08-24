@@ -61,6 +61,11 @@ struct Range {
     2: required i64 to
 }
 
+struct BrowserSettings {
+    1: required i32 windowless_frame_rate = 0,
+    2: required bool sharedTexturesEnabled = false
+}
+
 enum Style {
     SOLID,
     DOT,

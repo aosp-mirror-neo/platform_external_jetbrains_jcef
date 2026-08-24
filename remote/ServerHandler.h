@@ -41,7 +41,7 @@ class ServerHandler : public thrift_codegen::ServerIf {
   // CefBrowser
   //
   int32_t Browser_Create(int cid, const thrift_codegen::RObject& requestContext) override;
-  void Browser_StartNativeCreation(int bid, const std::string& url) override;
+  void Browser_StartNativeCreation(int bid, const std::string& url, const thrift_codegen::BrowserSettings& settings) override;
   void Browser_OpenDevTools(int bid, int x, int y) override;
   void Browser_Close(const int32_t bid) override;
   void Browser_CloseDevTools(const int32_t bid) override;

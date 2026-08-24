@@ -1520,6 +1520,121 @@ void Range::printTo(std::ostream& out) const {
 }
 
 
+BrowserSettings::~BrowserSettings() noexcept {
+}
+
+
+void BrowserSettings::__set_windowless_frame_rate(const int32_t val) {
+  this->windowless_frame_rate = val;
+}
+
+void BrowserSettings::__set_sharedTexturesEnabled(const bool val) {
+  this->sharedTexturesEnabled = val;
+}
+std::ostream& operator<<(std::ostream& out, const BrowserSettings& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+
+uint32_t BrowserSettings::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_windowless_frame_rate = false;
+  bool isset_sharedTexturesEnabled = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->windowless_frame_rate);
+          isset_windowless_frame_rate = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->sharedTexturesEnabled);
+          isset_sharedTexturesEnabled = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_windowless_frame_rate)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_sharedTexturesEnabled)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t BrowserSettings::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("BrowserSettings");
+
+  xfer += oprot->writeFieldBegin("windowless_frame_rate", ::apache::thrift::protocol::T_I32, 1);
+  xfer += oprot->writeI32(this->windowless_frame_rate);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("sharedTexturesEnabled", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->sharedTexturesEnabled);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(BrowserSettings &a, BrowserSettings &b) {
+  using ::std::swap;
+  swap(a.windowless_frame_rate, b.windowless_frame_rate);
+  swap(a.sharedTexturesEnabled, b.sharedTexturesEnabled);
+}
+
+BrowserSettings::BrowserSettings(const BrowserSettings& other30) noexcept {
+  windowless_frame_rate = other30.windowless_frame_rate;
+  sharedTexturesEnabled = other30.sharedTexturesEnabled;
+}
+BrowserSettings& BrowserSettings::operator=(const BrowserSettings& other31) noexcept {
+  windowless_frame_rate = other31.windowless_frame_rate;
+  sharedTexturesEnabled = other31.sharedTexturesEnabled;
+  return *this;
+}
+void BrowserSettings::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "BrowserSettings(";
+  out << "windowless_frame_rate=" << to_string(windowless_frame_rate);
+  out << ", " << "sharedTexturesEnabled=" << to_string(sharedTexturesEnabled);
+  out << ")";
+}
+
+
 Color::~Color() noexcept {
 }
 
@@ -1646,19 +1761,19 @@ void swap(Color &a, Color &b) {
   swap(a.__isset, b.__isset);
 }
 
-Color::Color(const Color& other30) noexcept {
-  red = other30.red;
-  green = other30.green;
-  blue = other30.blue;
-  alpha = other30.alpha;
-  __isset = other30.__isset;
+Color::Color(const Color& other32) noexcept {
+  red = other32.red;
+  green = other32.green;
+  blue = other32.blue;
+  alpha = other32.alpha;
+  __isset = other32.__isset;
 }
-Color& Color::operator=(const Color& other31) noexcept {
-  red = other31.red;
-  green = other31.green;
-  blue = other31.blue;
-  alpha = other31.alpha;
-  __isset = other31.__isset;
+Color& Color::operator=(const Color& other33) noexcept {
+  red = other33.red;
+  green = other33.green;
+  blue = other33.blue;
+  alpha = other33.alpha;
+  __isset = other33.__isset;
   return *this;
 }
 void Color::printTo(std::ostream& out) const {
@@ -1762,9 +1877,9 @@ uint32_t CompositionUnderline::read(::apache::thrift::protocol::TProtocol* iprot
         break;
       case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast32;
-          xfer += iprot->readI32(ecast32);
-          this->style = static_cast<Style::type>(ecast32);
+          int32_t ecast34;
+          xfer += iprot->readI32(ecast34);
+          this->style = static_cast<Style::type>(ecast34);
           isset_style = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1831,19 +1946,19 @@ void swap(CompositionUnderline &a, CompositionUnderline &b) {
   swap(a.style, b.style);
 }
 
-CompositionUnderline::CompositionUnderline(const CompositionUnderline& other33) noexcept {
-  range = other33.range;
-  color = other33.color;
-  backgroundColor = other33.backgroundColor;
-  thick = other33.thick;
-  style = other33.style;
+CompositionUnderline::CompositionUnderline(const CompositionUnderline& other35) noexcept {
+  range = other35.range;
+  color = other35.color;
+  backgroundColor = other35.backgroundColor;
+  thick = other35.thick;
+  style = other35.style;
 }
-CompositionUnderline& CompositionUnderline::operator=(const CompositionUnderline& other34) noexcept {
-  range = other34.range;
-  color = other34.color;
-  backgroundColor = other34.backgroundColor;
-  thick = other34.thick;
-  style = other34.style;
+CompositionUnderline& CompositionUnderline::operator=(const CompositionUnderline& other36) noexcept {
+  range = other36.range;
+  color = other36.color;
+  backgroundColor = other36.backgroundColor;
+  thick = other36.thick;
+  style = other36.style;
   return *this;
 }
 void CompositionUnderline::printTo(std::ostream& out) const {
@@ -1926,9 +2041,9 @@ uint32_t CefValue::read(::apache::thrift::protocol::TProtocol* iprot) {
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I32) {
-          int32_t ecast35;
-          xfer += iprot->readI32(ecast35);
-          this->type = static_cast<CefValueType::type>(ecast35);
+          int32_t ecast37;
+          xfer += iprot->readI32(ecast37);
+          this->type = static_cast<CefValueType::type>(ecast37);
           isset_type = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1970,17 +2085,17 @@ uint32_t CefValue::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->mapVal.clear();
-            uint32_t _size36;
-            ::apache::thrift::protocol::TType _ktype37;
-            ::apache::thrift::protocol::TType _vtype38;
-            xfer += iprot->readMapBegin(_ktype37, _vtype38, _size36);
-            uint32_t _i40;
-            for (_i40 = 0; _i40 < _size36; ++_i40)
+            uint32_t _size38;
+            ::apache::thrift::protocol::TType _ktype39;
+            ::apache::thrift::protocol::TType _vtype40;
+            xfer += iprot->readMapBegin(_ktype39, _vtype40, _size38);
+            uint32_t _i42;
+            for (_i42 = 0; _i42 < _size38; ++_i42)
             {
-              std::string _key41;
-              xfer += iprot->readString(_key41);
-              CefValue& _val42 = this->mapVal[_key41];
-              xfer += _val42.read(iprot);
+              std::string _key43;
+              xfer += iprot->readString(_key43);
+              CefValue& _val44 = this->mapVal[_key43];
+              xfer += _val44.read(iprot);
             }
             xfer += iprot->readMapEnd();
           }
@@ -1993,14 +2108,14 @@ uint32_t CefValue::read(::apache::thrift::protocol::TProtocol* iprot) {
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->listVal.clear();
-            uint32_t _size43;
-            ::apache::thrift::protocol::TType _etype46;
-            xfer += iprot->readListBegin(_etype46, _size43);
-            this->listVal.resize(_size43);
-            uint32_t _i47;
-            for (_i47 = 0; _i47 < _size43; ++_i47)
+            uint32_t _size45;
+            ::apache::thrift::protocol::TType _etype48;
+            xfer += iprot->readListBegin(_etype48, _size45);
+            this->listVal.resize(_size45);
+            uint32_t _i49;
+            for (_i49 = 0; _i49 < _size45; ++_i49)
             {
-              xfer += this->listVal[_i47].read(iprot);
+              xfer += this->listVal[_i49].read(iprot);
             }
             xfer += iprot->readListEnd();
           }
@@ -2056,11 +2171,11 @@ uint32_t CefValue::write(::apache::thrift::protocol::TProtocol* oprot) const {
     xfer += oprot->writeFieldBegin("mapVal", ::apache::thrift::protocol::T_MAP, 6);
     {
       xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->mapVal.size()));
-      std::map<std::string, CefValue> ::const_iterator _iter48;
-      for (_iter48 = this->mapVal.begin(); _iter48 != this->mapVal.end(); ++_iter48)
+      std::map<std::string, CefValue> ::const_iterator _iter50;
+      for (_iter50 = this->mapVal.begin(); _iter50 != this->mapVal.end(); ++_iter50)
       {
-        xfer += oprot->writeString(_iter48->first);
-        xfer += _iter48->second.write(oprot);
+        xfer += oprot->writeString(_iter50->first);
+        xfer += _iter50->second.write(oprot);
       }
       xfer += oprot->writeMapEnd();
     }
@@ -2070,10 +2185,10 @@ uint32_t CefValue::write(::apache::thrift::protocol::TProtocol* oprot) const {
     xfer += oprot->writeFieldBegin("listVal", ::apache::thrift::protocol::T_LIST, 7);
     {
       xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->listVal.size()));
-      std::vector<CefValue> ::const_iterator _iter49;
-      for (_iter49 = this->listVal.begin(); _iter49 != this->listVal.end(); ++_iter49)
+      std::vector<CefValue> ::const_iterator _iter51;
+      for (_iter51 = this->listVal.begin(); _iter51 != this->listVal.end(); ++_iter51)
       {
-        xfer += (*_iter49).write(oprot);
+        xfer += (*_iter51).write(oprot);
       }
       xfer += oprot->writeListEnd();
     }
@@ -2096,25 +2211,25 @@ void swap(CefValue &a, CefValue &b) {
   swap(a.__isset, b.__isset);
 }
 
-CefValue::CefValue(const CefValue& other50) {
-  type = other50.type;
-  intVal = other50.intVal;
-  doubleVal = other50.doubleVal;
-  strVal = other50.strVal;
-  binVal = other50.binVal;
-  mapVal = other50.mapVal;
-  listVal = other50.listVal;
-  __isset = other50.__isset;
+CefValue::CefValue(const CefValue& other52) {
+  type = other52.type;
+  intVal = other52.intVal;
+  doubleVal = other52.doubleVal;
+  strVal = other52.strVal;
+  binVal = other52.binVal;
+  mapVal = other52.mapVal;
+  listVal = other52.listVal;
+  __isset = other52.__isset;
 }
-CefValue& CefValue::operator=(const CefValue& other51) {
-  type = other51.type;
-  intVal = other51.intVal;
-  doubleVal = other51.doubleVal;
-  strVal = other51.strVal;
-  binVal = other51.binVal;
-  mapVal = other51.mapVal;
-  listVal = other51.listVal;
-  __isset = other51.__isset;
+CefValue& CefValue::operator=(const CefValue& other53) {
+  type = other53.type;
+  intVal = other53.intVal;
+  doubleVal = other53.doubleVal;
+  strVal = other53.strVal;
+  binVal = other53.binVal;
+  mapVal = other53.mapVal;
+  listVal = other53.listVal;
+  __isset = other53.__isset;
   return *this;
 }
 void CefValue::printTo(std::ostream& out) const {

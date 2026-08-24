@@ -71,6 +71,8 @@ class Cookie;
 
 class Range;
 
+class BrowserSettings;
+
 class Color;
 
 class CompositionUnderline;
@@ -598,6 +600,49 @@ class Range : public virtual ::apache::thrift::TBase {
 void swap(Range &a, Range &b);
 
 std::ostream& operator<<(std::ostream& out, const Range& obj);
+
+
+class BrowserSettings : public virtual ::apache::thrift::TBase {
+ public:
+
+  BrowserSettings(const BrowserSettings&) noexcept;
+  BrowserSettings& operator=(const BrowserSettings&) noexcept;
+  BrowserSettings() noexcept
+                  : windowless_frame_rate(0),
+                    sharedTexturesEnabled(false) {
+  }
+
+  virtual ~BrowserSettings() noexcept;
+  int32_t windowless_frame_rate;
+  bool sharedTexturesEnabled;
+
+  void __set_windowless_frame_rate(const int32_t val);
+
+  void __set_sharedTexturesEnabled(const bool val);
+
+  bool operator == (const BrowserSettings & rhs) const
+  {
+    if (!(windowless_frame_rate == rhs.windowless_frame_rate))
+      return false;
+    if (!(sharedTexturesEnabled == rhs.sharedTexturesEnabled))
+      return false;
+    return true;
+  }
+  bool operator != (const BrowserSettings &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const BrowserSettings & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot) override;
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const override;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(BrowserSettings &a, BrowserSettings &b);
+
+std::ostream& operator<<(std::ostream& out, const BrowserSettings& obj);
 
 typedef struct _Color__isset {
   _Color__isset() : red(false), green(false), blue(false), alpha(false) {}

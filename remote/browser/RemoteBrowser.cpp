@@ -74,11 +74,15 @@ namespace {
       CefRefPtr<RemoteClientHandler> clienthandler,
       CefRefPtr<CefRequestContext> requestContext,
       std::string url,
+      int windowlessFrameRate,
+      bool sharedTexturesEnabled,
       std::function<void(int)> onCreationFailed
   ) {
-    CefBrowserSettings settings; // TODO: get real CefBrowserSettings from java
+    CefBrowserSettings settings;
+    settings.windowless_frame_rate = windowlessFrameRate;
     CefWindowInfo windowInfo;
     windowInfo.SetAsWindowless(0);
+    windowInfo.shared_texture_enabled = sharedTexturesEnabled;
     // JCEF requires Alloy runtime style for "normal" browsers in order for them
     // to be integratable into Java UI.
     windowInfo.runtime_style = CEF_RUNTIME_STYLE_ALLOY;
@@ -108,28 +112,35 @@ namespace {
   void openDevToolsPopupImpl(
       int bid,
       CefRefPtr<CefBrowser> parentBrowser,
-      CefPoint inspectAt
+      CefPoint inspectAt,
+      int windowlessFrameRate,
+      bool sharedTexturesEnabled
   ) {
     if (!parentBrowser)
       return;
 
     Log::trace( "ShowDevTools: bid=%d, pt=(%d,%d)", bid, inspectAt.x, inspectAt.y);
     CefWindowInfo windowInfo;
-    CefBrowserSettings settings; // TODO: get real CefBrowserSettings from java
+    windowInfo.shared_texture_enabled = sharedTexturesEnabled;
+    CefBrowserSettings settings;
+    settings.windowless_frame_rate = windowlessFrameRate;
     parentBrowser->GetHost()->ShowDevTools(windowInfo, nullptr, settings, inspectAt);
   }
 }
 
-void RemoteBrowser::startNativeBrowserCreation(const std::string & url) {
+void RemoteBrowser::startNativeBrowserCreation(const std::string & url, int windowlessFrameRate, bool sharedTexturesEnabled) {
+    myWindowlessFrameRate = windowlessFrameRate;
+    mySharedTexturesEnabled = sharedTexturesEnabled;
+
     std::function remove = [=](int bid){
         myOwner->eraseBrowser(bid);
         std::unique_lock lock(ourBid2BrowserMutex);
         ourBid2Browser.erase(bid);
     };
     if (CefCurrentlyOn(TID_UI)) {
-        createCefBrowserImpl(getCid(), myBid, myOwner->myRemoteClientHandler, myRequestContext, url, remove);
+        createCefBrowserImpl(getCid(), myBid, myOwner->myRemoteClientHandler, myRequestContext, url, windowlessFrameRate, sharedTexturesEnabled, remove);
     } else {
-        CefPostTask(TID_UI, base::BindOnce(&createCefBrowserImpl, getCid(), myBid, myOwner->myRemoteClientHandler, myRequestContext, url, remove));
+        CefPostTask(TID_UI, base::BindOnce(&createCefBrowserImpl, getCid(), myBid, myOwner->myRemoteClientHandler, myRequestContext, url, windowlessFrameRate, sharedTexturesEnabled, remove));
     }
 }
 
@@ -140,9 +151,9 @@ void RemoteBrowser::openDevTools(int x, int y) {
     }
 
     if (CefCurrentlyOn(TID_UI)) {
-        openDevToolsPopupImpl(myBid, myCefBrowser, CefPoint(x, y));
+        openDevToolsPopupImpl(myBid, myCefBrowser, CefPoint(x, y), myWindowlessFrameRate, mySharedTexturesEnabled);
     } else {
-        CefPostTask(TID_UI, base::BindOnce(&openDevToolsPopupImpl, myBid, myCefBrowser, CefPoint(x, y)));
+        CefPostTask(TID_UI, base::BindOnce(&openDevToolsPopupImpl, myBid, myCefBrowser, CefPoint(x, y), myWindowlessFrameRate, mySharedTexturesEnabled));
     }
 }
 

@@ -209,12 +209,12 @@ int32_t ServerHandler::Browser_Create(int cid, const thrift_codegen::RObject& re
   return result->getBid();
 }
 
-void ServerHandler::Browser_StartNativeCreation(int bid, const std::string& url) {
+void ServerHandler::Browser_StartNativeCreation(int bid, const std::string& url, const thrift_codegen::BrowserSettings& settings) {
   MEASURE;
   std::shared_ptr<RemoteBrowser> rb = RemoteBrowser::find(bid);
   if (!rb)
     return;
-  rb->startNativeBrowserCreation(url);
+  rb->startNativeBrowserCreation(url, settings.windowless_frame_rate, settings.sharedTexturesEnabled);
   Log::trace("ServerHandler: started creation of native CefBrowser for remote browser bid=%d, url=%s", bid, url.c_str());
 }
 

@@ -9,6 +9,7 @@ import com.jetbrains.cef.remote.callback.RemoteStringVisitor;
 import com.jetbrains.cef.remote.network.RemoteRequest;
 import com.jetbrains.cef.remote.network.RemoteRequestContext;
 import com.jetbrains.cef.remote.network.RemoteRequestImpl;
+import com.jetbrains.cef.remote.thrift_codegen.BrowserSettings;
 import com.jetbrains.cef.remote.thrift_codegen.CompositionUnderline;
 import com.jetbrains.cef.remote.thrift_codegen.RObject;
 import com.jetbrains.cef.remote.thrift_codegen.Range;
@@ -47,7 +48,7 @@ public class RemoteBrowser implements CefBrowser {
     private final RemoteClient myOwner;
     private final CefClient myCefClient; // will be the "owner" of RemoteClient, needed to override getClient()
     private final RemoteRequestContext myRequestContext;
-    private final CefBrowserSettings mySettings; // TODO: use settings in startNativeCreation
+    private final CefBrowserSettings mySettings;
     private final Delayed myDelayed;
 
     private volatile int myBid = -1;
@@ -117,9 +118,11 @@ public class RemoteBrowser implements CefBrowser {
             if (myBid >= 0) {
                 myRpc.server.bid2Browser.put(myBid, new WeakReference<>(this));
                 CefLog.Debug("Registered bid %d", myBid);
+                final CefBrowserSettings settings = mySettings != null ? mySettings : new CefBrowserSettings();
+                final BrowserSettings rsettings = new BrowserSettings(settings.windowless_frame_rate, settings.sharedTexturesEnabled);
                 // At current point new bid is registered so java-handlers calls will be dispatched correctly.
                 // We can't start creation earlier because for example onAfterCreated can be called before new bid is registered.
-                myRpc.exec((s) -> s.Browser_StartNativeCreation(myBid, myUrl));
+                myRpc.exec((s) -> s.Browser_StartNativeCreation(myBid, myUrl, rsettings));
             } else
                 CefLog.Error("Can't obtain bid, createBrowser returns %d", myBid);
         }

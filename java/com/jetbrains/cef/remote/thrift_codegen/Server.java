@@ -39,7 +39,7 @@ public class Server {
 
     public int Browser_Create(int cid, com.jetbrains.cef.remote.thrift_codegen.RObject requestContext) throws com.jetbrains.cef.remote.thrift.TException;
 
-    public void Browser_StartNativeCreation(int bid, java.lang.String url) throws com.jetbrains.cef.remote.thrift.TException;
+    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_OpenDevTools(int bid, int x, int y) throws com.jetbrains.cef.remote.thrift.TException;
 
@@ -60,8 +60,6 @@ public class Server {
     public void Browser_ExecuteJavaScript(int bid, java.lang.String code, java.lang.String url, int line) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_WasResized(int bid) throws com.jetbrains.cef.remote.thrift.TException;
-
-    public void Browser_WasHidden(int bid, boolean hidden) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_NotifyScreenInfoChanged(int bid) throws com.jetbrains.cef.remote.thrift.TException;
 
@@ -305,7 +303,7 @@ public class Server {
 
     public void Browser_Create(int cid, com.jetbrains.cef.remote.thrift_codegen.RObject requestContext, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
-    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
+    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_OpenDevTools(int bid, int x, int y, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
@@ -326,8 +324,6 @@ public class Server {
     public void Browser_ExecuteJavaScript(int bid, java.lang.String code, java.lang.String url, int line, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_WasResized(int bid, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
-
-    public void Browser_WasHidden(int bid, boolean hidden, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
     public void Browser_NotifyScreenInfoChanged(int bid, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException;
 
@@ -842,16 +838,17 @@ public class Server {
     }
 
     @Override
-    public void Browser_StartNativeCreation(int bid, java.lang.String url) throws com.jetbrains.cef.remote.thrift.TException
+    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings) throws com.jetbrains.cef.remote.thrift.TException
     {
-      send_Browser_StartNativeCreation(bid, url);
+      send_Browser_StartNativeCreation(bid, url, settings);
     }
 
-    public void send_Browser_StartNativeCreation(int bid, java.lang.String url) throws com.jetbrains.cef.remote.thrift.TException
+    public void send_Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings) throws com.jetbrains.cef.remote.thrift.TException
     {
       Browser_StartNativeCreation_args args = new Browser_StartNativeCreation_args();
       args.setBid(bid);
       args.setUrl(url);
+      args.setSettings(settings);
       sendBaseOneway("Browser_StartNativeCreation", args);
     }
 
@@ -1009,20 +1006,6 @@ public class Server {
       Browser_WasResized_args args = new Browser_WasResized_args();
       args.setBid(bid);
       sendBaseOneway("Browser_WasResized", args);
-    }
-
-    @Override
-    public void Browser_WasHidden(int bid, boolean hidden) throws com.jetbrains.cef.remote.thrift.TException
-    {
-      send_Browser_WasHidden(bid, hidden);
-    }
-
-    public void send_Browser_WasHidden(int bid, boolean hidden) throws com.jetbrains.cef.remote.thrift.TException
-    {
-      Browser_WasHidden_args args = new Browser_WasHidden_args();
-      args.setBid(bid);
-      args.setHidden(hidden);
-      sendBaseOneway("Browser_WasHidden", args);
     }
 
     @Override
@@ -3576,9 +3559,9 @@ public class Server {
     }
 
     @Override
-    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
+    public void Browser_StartNativeCreation(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
       checkReady();
-      Browser_StartNativeCreation_call method_call = new Browser_StartNativeCreation_call(bid, url, resultHandler, this, ___protocolFactory, ___transport);
+      Browser_StartNativeCreation_call method_call = new Browser_StartNativeCreation_call(bid, url, settings, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
@@ -3586,10 +3569,12 @@ public class Server {
     public static class Browser_StartNativeCreation_call extends com.jetbrains.cef.remote.thrift.async.TAsyncMethodCall<Void> {
       private int bid;
       private java.lang.String url;
-      public Browser_StartNativeCreation_call(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler, com.jetbrains.cef.remote.thrift.async.TAsyncClient client, com.jetbrains.cef.remote.thrift.protocol.TProtocolFactory protocolFactory, com.jetbrains.cef.remote.thrift.transport.TNonblockingTransport transport) throws com.jetbrains.cef.remote.thrift.TException {
+      private com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings;
+      public Browser_StartNativeCreation_call(int bid, java.lang.String url, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler, com.jetbrains.cef.remote.thrift.async.TAsyncClient client, com.jetbrains.cef.remote.thrift.protocol.TProtocolFactory protocolFactory, com.jetbrains.cef.remote.thrift.transport.TNonblockingTransport transport) throws com.jetbrains.cef.remote.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, true);
         this.bid = bid;
         this.url = url;
+        this.settings = settings;
       }
 
       @Override
@@ -3598,6 +3583,7 @@ public class Server {
         Browser_StartNativeCreation_args args = new Browser_StartNativeCreation_args();
         args.setBid(bid);
         args.setUrl(url);
+        args.setSettings(settings);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -3970,44 +3956,6 @@ public class Server {
         prot.writeMessageBegin(new com.jetbrains.cef.remote.thrift.protocol.TMessage("Browser_WasResized", com.jetbrains.cef.remote.thrift.protocol.TMessageType.ONEWAY, 0));
         Browser_WasResized_args args = new Browser_WasResized_args();
         args.setBid(bid);
-        args.write(prot);
-        prot.writeMessageEnd();
-      }
-
-      @Override
-      public Void getResult() throws com.jetbrains.cef.remote.thrift.TException {
-        if (getState() != com.jetbrains.cef.remote.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
-        }
-        com.jetbrains.cef.remote.thrift.transport.TMemoryInputTransport memoryTransport = new com.jetbrains.cef.remote.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        com.jetbrains.cef.remote.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return null;
-      }
-    }
-
-    @Override
-    public void Browser_WasHidden(int bid, boolean hidden, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
-      checkReady();
-      Browser_WasHidden_call method_call = new Browser_WasHidden_call(bid, hidden, resultHandler, this, ___protocolFactory, ___transport);
-      this.___currentMethod = method_call;
-      ___manager.call(method_call);
-    }
-
-    public static class Browser_WasHidden_call extends com.jetbrains.cef.remote.thrift.async.TAsyncMethodCall<Void> {
-      private int bid;
-      private boolean hidden;
-      public Browser_WasHidden_call(int bid, boolean hidden, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler, com.jetbrains.cef.remote.thrift.async.TAsyncClient client, com.jetbrains.cef.remote.thrift.protocol.TProtocolFactory protocolFactory, com.jetbrains.cef.remote.thrift.transport.TNonblockingTransport transport) throws com.jetbrains.cef.remote.thrift.TException {
-        super(client, protocolFactory, transport, resultHandler, true);
-        this.bid = bid;
-        this.hidden = hidden;
-      }
-
-      @Override
-      public void write_args(com.jetbrains.cef.remote.thrift.protocol.TProtocol prot) throws com.jetbrains.cef.remote.thrift.TException {
-        prot.writeMessageBegin(new com.jetbrains.cef.remote.thrift.protocol.TMessage("Browser_WasHidden", com.jetbrains.cef.remote.thrift.protocol.TMessageType.ONEWAY, 0));
-        Browser_WasHidden_args args = new Browser_WasHidden_args();
-        args.setBid(bid);
-        args.setHidden(hidden);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -8040,7 +7988,6 @@ public class Server {
       processMap.put("Browser_GetURL", new Browser_GetURL());
       processMap.put("Browser_ExecuteJavaScript", new Browser_ExecuteJavaScript());
       processMap.put("Browser_WasResized", new Browser_WasResized());
-      processMap.put("Browser_WasHidden", new Browser_WasHidden());
       processMap.put("Browser_NotifyScreenInfoChanged", new Browser_NotifyScreenInfoChanged());
       processMap.put("Browser_Invalidate", new Browser_Invalidate());
       processMap.put("Browser_SendCefKeyEvent", new Browser_SendCefKeyEvent());
@@ -8562,7 +8509,7 @@ public class Server {
 
       @Override
       public com.jetbrains.cef.remote.thrift.TBase getResult(I iface, Browser_StartNativeCreation_args args) throws com.jetbrains.cef.remote.thrift.TException {
-        iface.Browser_StartNativeCreation(args.bid, args.url);
+        iface.Browser_StartNativeCreation(args.bid, args.url, args.settings);
         return null;
       }
     }
@@ -8835,33 +8782,6 @@ public class Server {
       @Override
       public com.jetbrains.cef.remote.thrift.TBase getResult(I iface, Browser_WasResized_args args) throws com.jetbrains.cef.remote.thrift.TException {
         iface.Browser_WasResized(args.bid);
-        return null;
-      }
-    }
-
-    public static class Browser_WasHidden<I extends Iface> extends com.jetbrains.cef.remote.thrift.ProcessFunction<I, Browser_WasHidden_args> {
-      public Browser_WasHidden() {
-        super("Browser_WasHidden");
-      }
-
-      @Override
-      public Browser_WasHidden_args getEmptyArgsInstance() {
-        return new Browser_WasHidden_args();
-      }
-
-      @Override
-      protected boolean isOneway() {
-        return true;
-      }
-
-      @Override
-      protected boolean rethrowUnhandledExceptions() {
-        return false;
-      }
-
-      @Override
-      public com.jetbrains.cef.remote.thrift.TBase getResult(I iface, Browser_WasHidden_args args) throws com.jetbrains.cef.remote.thrift.TException {
-        iface.Browser_WasHidden(args.bid, args.hidden);
         return null;
       }
     }
@@ -11810,7 +11730,6 @@ public class Server {
       processMap.put("Browser_GetURL", new Browser_GetURL());
       processMap.put("Browser_ExecuteJavaScript", new Browser_ExecuteJavaScript());
       processMap.put("Browser_WasResized", new Browser_WasResized());
-      processMap.put("Browser_WasHidden", new Browser_WasHidden());
       processMap.put("Browser_NotifyScreenInfoChanged", new Browser_NotifyScreenInfoChanged());
       processMap.put("Browser_Invalidate", new Browser_Invalidate());
       processMap.put("Browser_SendCefKeyEvent", new Browser_SendCefKeyEvent());
@@ -12759,7 +12678,7 @@ public class Server {
 
       @Override
       public void start(I iface, Browser_StartNativeCreation_args args, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
-        iface.Browser_StartNativeCreation(args.bid, args.url,resultHandler);
+        iface.Browser_StartNativeCreation(args.bid, args.url, args.settings,resultHandler);
       }
     }
 
@@ -13213,46 +13132,6 @@ public class Server {
       @Override
       public void start(I iface, Browser_WasResized_args args, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
         iface.Browser_WasResized(args.bid,resultHandler);
-      }
-    }
-
-    public static class Browser_WasHidden<I extends AsyncIface> extends com.jetbrains.cef.remote.thrift.AsyncProcessFunction<I, Browser_WasHidden_args, Void> {
-      public Browser_WasHidden() {
-        super("Browser_WasHidden");
-      }
-
-      @Override
-      public Browser_WasHidden_args getEmptyArgsInstance() {
-        return new Browser_WasHidden_args();
-      }
-
-      @Override
-      public com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> getResultHandler(final com.jetbrains.cef.remote.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final com.jetbrains.cef.remote.thrift.AsyncProcessFunction fcall = this;
-        return new com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void>() { 
-          @Override
-          public void onComplete(Void o) {
-          }
-          @Override
-          public void onError(java.lang.Exception e) {
-            if (e instanceof com.jetbrains.cef.remote.thrift.transport.TTransportException) {
-              _LOGGER.error("TTransportException inside handler", e);
-              fb.close();
-            } else {
-              _LOGGER.error("Exception inside oneway handler", e);
-            }
-          }
-        };
-      }
-
-      @Override
-      protected boolean isOneway() {
-        return true;
-      }
-
-      @Override
-      public void start(I iface, Browser_WasHidden_args args, com.jetbrains.cef.remote.thrift.async.AsyncMethodCallback<Void> resultHandler) throws com.jetbrains.cef.remote.thrift.TException {
-        iface.Browser_WasHidden(args.bid, args.hidden,resultHandler);
       }
     }
 
@@ -27912,17 +27791,20 @@ public class Server {
 
     private static final com.jetbrains.cef.remote.thrift.protocol.TField BID_FIELD_DESC = new com.jetbrains.cef.remote.thrift.protocol.TField("bid", com.jetbrains.cef.remote.thrift.protocol.TType.I32, (short)1);
     private static final com.jetbrains.cef.remote.thrift.protocol.TField URL_FIELD_DESC = new com.jetbrains.cef.remote.thrift.protocol.TField("url", com.jetbrains.cef.remote.thrift.protocol.TType.STRING, (short)2);
+    private static final com.jetbrains.cef.remote.thrift.protocol.TField SETTINGS_FIELD_DESC = new com.jetbrains.cef.remote.thrift.protocol.TField("settings", com.jetbrains.cef.remote.thrift.protocol.TType.STRUCT, (short)3);
 
     private static final com.jetbrains.cef.remote.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new Browser_StartNativeCreation_argsStandardSchemeFactory();
     private static final com.jetbrains.cef.remote.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new Browser_StartNativeCreation_argsTupleSchemeFactory();
 
     public int bid; // required
     public @com.jetbrains.cef.remote.thrift.annotation.Nullable java.lang.String url; // required
+    public @com.jetbrains.cef.remote.thrift.annotation.Nullable com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements com.jetbrains.cef.remote.thrift.TFieldIdEnum {
       BID((short)1, "bid"),
-      URL((short)2, "url");
+      URL((short)2, "url"),
+      SETTINGS((short)3, "settings");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -27942,6 +27824,8 @@ public class Server {
             return BID;
           case 2: // URL
             return URL;
+          case 3: // SETTINGS
+            return SETTINGS;
           default:
             return null;
         }
@@ -27994,6 +27878,8 @@ public class Server {
           new com.jetbrains.cef.remote.thrift.meta_data.FieldValueMetaData(com.jetbrains.cef.remote.thrift.protocol.TType.I32)));
       tmpMap.put(_Fields.URL, new com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData("url", com.jetbrains.cef.remote.thrift.TFieldRequirementType.DEFAULT, 
           new com.jetbrains.cef.remote.thrift.meta_data.FieldValueMetaData(com.jetbrains.cef.remote.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.SETTINGS, new com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData("settings", com.jetbrains.cef.remote.thrift.TFieldRequirementType.DEFAULT, 
+          new com.jetbrains.cef.remote.thrift.meta_data.StructMetaData(com.jetbrains.cef.remote.thrift.protocol.TType.STRUCT, com.jetbrains.cef.remote.thrift_codegen.BrowserSettings.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Browser_StartNativeCreation_args.class, metaDataMap);
     }
@@ -28003,12 +27889,14 @@ public class Server {
 
     public Browser_StartNativeCreation_args(
       int bid,
-      java.lang.String url)
+      java.lang.String url,
+      com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings)
     {
       this();
       this.bid = bid;
       setBidIsSet(true);
       this.url = url;
+      this.settings = settings;
     }
 
     /**
@@ -28019,6 +27907,9 @@ public class Server {
       this.bid = other.bid;
       if (other.isSetUrl()) {
         this.url = other.url;
+      }
+      if (other.isSetSettings()) {
+        this.settings = new com.jetbrains.cef.remote.thrift_codegen.BrowserSettings(other.settings);
       }
     }
 
@@ -28032,6 +27923,7 @@ public class Server {
       setBidIsSet(false);
       this.bid = 0;
       this.url = null;
+      this.settings = null;
     }
 
     public int getBid() {
@@ -28082,6 +27974,31 @@ public class Server {
       }
     }
 
+    @com.jetbrains.cef.remote.thrift.annotation.Nullable
+    public com.jetbrains.cef.remote.thrift_codegen.BrowserSettings getSettings() {
+      return this.settings;
+    }
+
+    public Browser_StartNativeCreation_args setSettings(@com.jetbrains.cef.remote.thrift.annotation.Nullable com.jetbrains.cef.remote.thrift_codegen.BrowserSettings settings) {
+      this.settings = settings;
+      return this;
+    }
+
+    public void unsetSettings() {
+      this.settings = null;
+    }
+
+    /** Returns true if field settings is set (has been assigned a value) and false otherwise */
+    public boolean isSetSettings() {
+      return this.settings != null;
+    }
+
+    public void setSettingsIsSet(boolean value) {
+      if (!value) {
+        this.settings = null;
+      }
+    }
+
     @Override
     public void setFieldValue(_Fields field, @com.jetbrains.cef.remote.thrift.annotation.Nullable java.lang.Object value) {
       switch (field) {
@@ -28101,6 +28018,14 @@ public class Server {
         }
         break;
 
+      case SETTINGS:
+        if (value == null) {
+          unsetSettings();
+        } else {
+          setSettings((com.jetbrains.cef.remote.thrift_codegen.BrowserSettings)value);
+        }
+        break;
+
       }
     }
 
@@ -28113,6 +28038,9 @@ public class Server {
 
       case URL:
         return getUrl();
+
+      case SETTINGS:
+        return getSettings();
 
       }
       throw new java.lang.IllegalStateException();
@@ -28130,6 +28058,8 @@ public class Server {
         return isSetBid();
       case URL:
         return isSetUrl();
+      case SETTINGS:
+        return isSetSettings();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -28165,6 +28095,15 @@ public class Server {
           return false;
       }
 
+      boolean this_present_settings = true && this.isSetSettings();
+      boolean that_present_settings = true && that.isSetSettings();
+      if (this_present_settings || that_present_settings) {
+        if (!(this_present_settings && that_present_settings))
+          return false;
+        if (!this.settings.equals(that.settings))
+          return false;
+      }
+
       return true;
     }
 
@@ -28177,6 +28116,10 @@ public class Server {
       hashCode = hashCode * 8191 + ((isSetUrl()) ? 131071 : 524287);
       if (isSetUrl())
         hashCode = hashCode * 8191 + url.hashCode();
+
+      hashCode = hashCode * 8191 + ((isSetSettings()) ? 131071 : 524287);
+      if (isSetSettings())
+        hashCode = hashCode * 8191 + settings.hashCode();
 
       return hashCode;
     }
@@ -28205,6 +28148,16 @@ public class Server {
       }
       if (isSetUrl()) {
         lastComparison = com.jetbrains.cef.remote.thrift.TBaseHelper.compareTo(this.url, other.url);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = java.lang.Boolean.compare(isSetSettings(), other.isSetSettings());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSettings()) {
+        lastComparison = com.jetbrains.cef.remote.thrift.TBaseHelper.compareTo(this.settings, other.settings);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -28244,6 +28197,14 @@ public class Server {
         sb.append(this.url);
       }
       first = false;
+      if (!first) sb.append(", ");
+      sb.append("settings:");
+      if (this.settings == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.settings);
+      }
+      first = false;
       sb.append(")");
       return sb.toString();
     }
@@ -28251,6 +28212,9 @@ public class Server {
     public void validate() throws com.jetbrains.cef.remote.thrift.TException {
       // check for required fields
       // check for sub-struct validity
+      if (settings != null) {
+        settings.validate();
+      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -28307,6 +28271,15 @@ public class Server {
                 com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
+            case 3: // SETTINGS
+              if (schemeField.type == com.jetbrains.cef.remote.thrift.protocol.TType.STRUCT) {
+                struct.settings = new com.jetbrains.cef.remote.thrift_codegen.BrowserSettings();
+                struct.settings.read(iprot);
+                struct.setSettingsIsSet(true);
+              } else { 
+                com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
             default:
               com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -28329,6 +28302,11 @@ public class Server {
         if (struct.url != null) {
           oprot.writeFieldBegin(URL_FIELD_DESC);
           oprot.writeString(struct.url);
+          oprot.writeFieldEnd();
+        }
+        if (struct.settings != null) {
+          oprot.writeFieldBegin(SETTINGS_FIELD_DESC);
+          struct.settings.write(oprot);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -28356,19 +28334,25 @@ public class Server {
         if (struct.isSetUrl()) {
           optionals.set(1);
         }
-        oprot.writeBitSet(optionals, 2);
+        if (struct.isSetSettings()) {
+          optionals.set(2);
+        }
+        oprot.writeBitSet(optionals, 3);
         if (struct.isSetBid()) {
           oprot.writeI32(struct.bid);
         }
         if (struct.isSetUrl()) {
           oprot.writeString(struct.url);
         }
+        if (struct.isSetSettings()) {
+          struct.settings.write(oprot);
+        }
       }
 
       @Override
       public void read(com.jetbrains.cef.remote.thrift.protocol.TProtocol prot, Browser_StartNativeCreation_args struct) throws com.jetbrains.cef.remote.thrift.TException {
         com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol iprot = (com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(2);
+        java.util.BitSet incoming = iprot.readBitSet(3);
         if (incoming.get(0)) {
           struct.bid = iprot.readI32();
           struct.setBidIsSet(true);
@@ -28376,6 +28360,11 @@ public class Server {
         if (incoming.get(1)) {
           struct.url = iprot.readString();
           struct.setUrlIsSet(true);
+        }
+        if (incoming.get(2)) {
+          struct.settings = new com.jetbrains.cef.remote.thrift_codegen.BrowserSettings();
+          struct.settings.read(iprot);
+          struct.setSettingsIsSet(true);
         }
       }
     }
@@ -33472,476 +33461,6 @@ public class Server {
         if (incoming.get(0)) {
           struct.bid = iprot.readI32();
           struct.setBidIsSet(true);
-        }
-      }
-    }
-
-    private static <S extends com.jetbrains.cef.remote.thrift.scheme.IScheme> S scheme(com.jetbrains.cef.remote.thrift.protocol.TProtocol proto) {
-      return (com.jetbrains.cef.remote.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
-    }
-  }
-
-  @SuppressWarnings({"cast", "rawtypes", "serial", "unchecked", "unused"})
-  public static class Browser_WasHidden_args implements com.jetbrains.cef.remote.thrift.TBase<Browser_WasHidden_args, Browser_WasHidden_args._Fields>, java.io.Serializable, Cloneable, Comparable<Browser_WasHidden_args>   {
-    private static final com.jetbrains.cef.remote.thrift.protocol.TStruct STRUCT_DESC = new com.jetbrains.cef.remote.thrift.protocol.TStruct("Browser_WasHidden_args");
-
-    private static final com.jetbrains.cef.remote.thrift.protocol.TField BID_FIELD_DESC = new com.jetbrains.cef.remote.thrift.protocol.TField("bid", com.jetbrains.cef.remote.thrift.protocol.TType.I32, (short)1);
-    private static final com.jetbrains.cef.remote.thrift.protocol.TField HIDDEN_FIELD_DESC = new com.jetbrains.cef.remote.thrift.protocol.TField("hidden", com.jetbrains.cef.remote.thrift.protocol.TType.BOOL, (short)2);
-
-    private static final com.jetbrains.cef.remote.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new Browser_WasHidden_argsStandardSchemeFactory();
-    private static final com.jetbrains.cef.remote.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new Browser_WasHidden_argsTupleSchemeFactory();
-
-    public int bid; // required
-    public boolean hidden; // required
-
-    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements com.jetbrains.cef.remote.thrift.TFieldIdEnum {
-      BID((short)1, "bid"),
-      HIDDEN((short)2, "hidden");
-
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
-
-      static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
-          byName.put(field.getFieldName(), field);
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, or null if its not found.
-       */
-      @com.jetbrains.cef.remote.thrift.annotation.Nullable
-      public static _Fields findByThriftId(int fieldId) {
-        switch(fieldId) {
-          case 1: // BID
-            return BID;
-          case 2: // HIDDEN
-            return HIDDEN;
-          default:
-            return null;
-        }
-      }
-
-      /**
-       * Find the _Fields constant that matches fieldId, throwing an exception
-       * if it is not found.
-       */
-      public static _Fields findByThriftIdOrThrow(int fieldId) {
-        _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
-        return fields;
-      }
-
-      /**
-       * Find the _Fields constant that matches name, or null if its not found.
-       */
-      @com.jetbrains.cef.remote.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
-        return byName.get(name);
-      }
-
-      private final short _thriftId;
-      private final java.lang.String _fieldName;
-
-      _Fields(short thriftId, java.lang.String fieldName) {
-        _thriftId = thriftId;
-        _fieldName = fieldName;
-      }
-
-      @Override
-      public short getThriftFieldId() {
-        return _thriftId;
-      }
-
-      @Override
-      public java.lang.String getFieldName() {
-        return _fieldName;
-      }
-    }
-
-    // isset id assignments
-    private static final int __BID_ISSET_ID = 0;
-    private static final int __HIDDEN_ISSET_ID = 1;
-    private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData> metaDataMap;
-    static {
-      java.util.Map<_Fields, com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.BID, new com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData("bid", com.jetbrains.cef.remote.thrift.TFieldRequirementType.DEFAULT, 
-          new com.jetbrains.cef.remote.thrift.meta_data.FieldValueMetaData(com.jetbrains.cef.remote.thrift.protocol.TType.I32)));
-      tmpMap.put(_Fields.HIDDEN, new com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData("hidden", com.jetbrains.cef.remote.thrift.TFieldRequirementType.DEFAULT, 
-          new com.jetbrains.cef.remote.thrift.meta_data.FieldValueMetaData(com.jetbrains.cef.remote.thrift.protocol.TType.BOOL)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      com.jetbrains.cef.remote.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Browser_WasHidden_args.class, metaDataMap);
-    }
-
-    public Browser_WasHidden_args() {
-    }
-
-    public Browser_WasHidden_args(
-      int bid,
-      boolean hidden)
-    {
-      this();
-      this.bid = bid;
-      setBidIsSet(true);
-      this.hidden = hidden;
-      setHiddenIsSet(true);
-    }
-
-    /**
-     * Performs a deep copy on <i>other</i>.
-     */
-    public Browser_WasHidden_args(Browser_WasHidden_args other) {
-      __isset_bitfield = other.__isset_bitfield;
-      this.bid = other.bid;
-      this.hidden = other.hidden;
-    }
-
-    @Override
-    public Browser_WasHidden_args deepCopy() {
-      return new Browser_WasHidden_args(this);
-    }
-
-    @Override
-    public void clear() {
-      setBidIsSet(false);
-      this.bid = 0;
-      setHiddenIsSet(false);
-      this.hidden = false;
-    }
-
-    public int getBid() {
-      return this.bid;
-    }
-
-    public Browser_WasHidden_args setBid(int bid) {
-      this.bid = bid;
-      setBidIsSet(true);
-      return this;
-    }
-
-    public void unsetBid() {
-      __isset_bitfield = com.jetbrains.cef.remote.thrift.EncodingUtils.clearBit(__isset_bitfield, __BID_ISSET_ID);
-    }
-
-    /** Returns true if field bid is set (has been assigned a value) and false otherwise */
-    public boolean isSetBid() {
-      return com.jetbrains.cef.remote.thrift.EncodingUtils.testBit(__isset_bitfield, __BID_ISSET_ID);
-    }
-
-    public void setBidIsSet(boolean value) {
-      __isset_bitfield = com.jetbrains.cef.remote.thrift.EncodingUtils.setBit(__isset_bitfield, __BID_ISSET_ID, value);
-    }
-
-    public boolean isHidden() {
-      return this.hidden;
-    }
-
-    public Browser_WasHidden_args setHidden(boolean hidden) {
-      this.hidden = hidden;
-      setHiddenIsSet(true);
-      return this;
-    }
-
-    public void unsetHidden() {
-      __isset_bitfield = com.jetbrains.cef.remote.thrift.EncodingUtils.clearBit(__isset_bitfield, __HIDDEN_ISSET_ID);
-    }
-
-    /** Returns true if field hidden is set (has been assigned a value) and false otherwise */
-    public boolean isSetHidden() {
-      return com.jetbrains.cef.remote.thrift.EncodingUtils.testBit(__isset_bitfield, __HIDDEN_ISSET_ID);
-    }
-
-    public void setHiddenIsSet(boolean value) {
-      __isset_bitfield = com.jetbrains.cef.remote.thrift.EncodingUtils.setBit(__isset_bitfield, __HIDDEN_ISSET_ID, value);
-    }
-
-    @Override
-    public void setFieldValue(_Fields field, @com.jetbrains.cef.remote.thrift.annotation.Nullable java.lang.Object value) {
-      switch (field) {
-      case BID:
-        if (value == null) {
-          unsetBid();
-        } else {
-          setBid((java.lang.Integer)value);
-        }
-        break;
-
-      case HIDDEN:
-        if (value == null) {
-          unsetHidden();
-        } else {
-          setHidden((java.lang.Boolean)value);
-        }
-        break;
-
-      }
-    }
-
-    @com.jetbrains.cef.remote.thrift.annotation.Nullable
-    @Override
-    public java.lang.Object getFieldValue(_Fields field) {
-      switch (field) {
-      case BID:
-        return getBid();
-
-      case HIDDEN:
-        return isHidden();
-
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
-    @Override
-    public boolean isSet(_Fields field) {
-      if (field == null) {
-        throw new java.lang.IllegalArgumentException();
-      }
-
-      switch (field) {
-      case BID:
-        return isSetBid();
-      case HIDDEN:
-        return isSetHidden();
-      }
-      throw new java.lang.IllegalStateException();
-    }
-
-    @Override
-    public boolean equals(java.lang.Object that) {
-      if (that instanceof Browser_WasHidden_args)
-        return this.equals((Browser_WasHidden_args)that);
-      return false;
-    }
-
-    public boolean equals(Browser_WasHidden_args that) {
-      if (that == null)
-        return false;
-      if (this == that)
-        return true;
-
-      boolean this_present_bid = true;
-      boolean that_present_bid = true;
-      if (this_present_bid || that_present_bid) {
-        if (!(this_present_bid && that_present_bid))
-          return false;
-        if (this.bid != that.bid)
-          return false;
-      }
-
-      boolean this_present_hidden = true;
-      boolean that_present_hidden = true;
-      if (this_present_hidden || that_present_hidden) {
-        if (!(this_present_hidden && that_present_hidden))
-          return false;
-        if (this.hidden != that.hidden)
-          return false;
-      }
-
-      return true;
-    }
-
-    @Override
-    public int hashCode() {
-      int hashCode = 1;
-
-      hashCode = hashCode * 8191 + bid;
-
-      hashCode = hashCode * 8191 + ((hidden) ? 131071 : 524287);
-
-      return hashCode;
-    }
-
-    @Override
-    public int compareTo(Browser_WasHidden_args other) {
-      if (!getClass().equals(other.getClass())) {
-        return getClass().getName().compareTo(other.getClass().getName());
-      }
-
-      int lastComparison = 0;
-
-      lastComparison = java.lang.Boolean.compare(isSetBid(), other.isSetBid());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetBid()) {
-        lastComparison = com.jetbrains.cef.remote.thrift.TBaseHelper.compareTo(this.bid, other.bid);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = java.lang.Boolean.compare(isSetHidden(), other.isSetHidden());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetHidden()) {
-        lastComparison = com.jetbrains.cef.remote.thrift.TBaseHelper.compareTo(this.hidden, other.hidden);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      return 0;
-    }
-
-    @com.jetbrains.cef.remote.thrift.annotation.Nullable
-    @Override
-    public _Fields fieldForId(int fieldId) {
-      return _Fields.findByThriftId(fieldId);
-    }
-
-    @Override
-    public void read(com.jetbrains.cef.remote.thrift.protocol.TProtocol iprot) throws com.jetbrains.cef.remote.thrift.TException {
-      scheme(iprot).read(iprot, this);
-    }
-
-    @Override
-    public void write(com.jetbrains.cef.remote.thrift.protocol.TProtocol oprot) throws com.jetbrains.cef.remote.thrift.TException {
-      scheme(oprot).write(oprot, this);
-    }
-
-    @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("Browser_WasHidden_args(");
-      boolean first = true;
-
-      sb.append("bid:");
-      sb.append(this.bid);
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("hidden:");
-      sb.append(this.hidden);
-      first = false;
-      sb.append(")");
-      return sb.toString();
-    }
-
-    public void validate() throws com.jetbrains.cef.remote.thrift.TException {
-      // check for required fields
-      // check for sub-struct validity
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
-      try {
-        write(new com.jetbrains.cef.remote.thrift.protocol.TCompactProtocol(new com.jetbrains.cef.remote.thrift.transport.TIOStreamTransport(out)));
-      } catch (com.jetbrains.cef.remote.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
-      try {
-        // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
-        __isset_bitfield = 0;
-        read(new com.jetbrains.cef.remote.thrift.protocol.TCompactProtocol(new com.jetbrains.cef.remote.thrift.transport.TIOStreamTransport(in)));
-      } catch (com.jetbrains.cef.remote.thrift.TException te) {
-        throw new java.io.IOException(te);
-      }
-    }
-
-    private static class Browser_WasHidden_argsStandardSchemeFactory implements com.jetbrains.cef.remote.thrift.scheme.SchemeFactory {
-      @Override
-      public Browser_WasHidden_argsStandardScheme getScheme() {
-        return new Browser_WasHidden_argsStandardScheme();
-      }
-    }
-
-    private static class Browser_WasHidden_argsStandardScheme extends com.jetbrains.cef.remote.thrift.scheme.StandardScheme<Browser_WasHidden_args> {
-
-      @Override
-      public void read(com.jetbrains.cef.remote.thrift.protocol.TProtocol iprot, Browser_WasHidden_args struct) throws com.jetbrains.cef.remote.thrift.TException {
-        com.jetbrains.cef.remote.thrift.protocol.TField schemeField;
-        iprot.readStructBegin();
-        while (true)
-        {
-          schemeField = iprot.readFieldBegin();
-          if (schemeField.type == com.jetbrains.cef.remote.thrift.protocol.TType.STOP) { 
-            break;
-          }
-          switch (schemeField.id) {
-            case 1: // BID
-              if (schemeField.type == com.jetbrains.cef.remote.thrift.protocol.TType.I32) {
-                struct.bid = iprot.readI32();
-                struct.setBidIsSet(true);
-              } else { 
-                com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            case 2: // HIDDEN
-              if (schemeField.type == com.jetbrains.cef.remote.thrift.protocol.TType.BOOL) {
-                struct.hidden = iprot.readBool();
-                struct.setHiddenIsSet(true);
-              } else { 
-                com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
-            default:
-              com.jetbrains.cef.remote.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-          }
-          iprot.readFieldEnd();
-        }
-        iprot.readStructEnd();
-
-        // check for required fields of primitive type, which can't be checked in the validate method
-        struct.validate();
-      }
-
-      @Override
-      public void write(com.jetbrains.cef.remote.thrift.protocol.TProtocol oprot, Browser_WasHidden_args struct) throws com.jetbrains.cef.remote.thrift.TException {
-        struct.validate();
-
-        oprot.writeStructBegin(STRUCT_DESC);
-        oprot.writeFieldBegin(BID_FIELD_DESC);
-        oprot.writeI32(struct.bid);
-        oprot.writeFieldEnd();
-        oprot.writeFieldBegin(HIDDEN_FIELD_DESC);
-        oprot.writeBool(struct.hidden);
-        oprot.writeFieldEnd();
-        oprot.writeFieldStop();
-        oprot.writeStructEnd();
-      }
-
-    }
-
-    private static class Browser_WasHidden_argsTupleSchemeFactory implements com.jetbrains.cef.remote.thrift.scheme.SchemeFactory {
-      @Override
-      public Browser_WasHidden_argsTupleScheme getScheme() {
-        return new Browser_WasHidden_argsTupleScheme();
-      }
-    }
-
-    private static class Browser_WasHidden_argsTupleScheme extends com.jetbrains.cef.remote.thrift.scheme.TupleScheme<Browser_WasHidden_args> {
-
-      @Override
-      public void write(com.jetbrains.cef.remote.thrift.protocol.TProtocol prot, Browser_WasHidden_args struct) throws com.jetbrains.cef.remote.thrift.TException {
-        com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol oprot = (com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
-        if (struct.isSetBid()) {
-          optionals.set(0);
-        }
-        if (struct.isSetHidden()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
-        if (struct.isSetBid()) {
-          oprot.writeI32(struct.bid);
-        }
-        if (struct.isSetHidden()) {
-          oprot.writeBool(struct.hidden);
-        }
-      }
-
-      @Override
-      public void read(com.jetbrains.cef.remote.thrift.protocol.TProtocol prot, Browser_WasHidden_args struct) throws com.jetbrains.cef.remote.thrift.TException {
-        com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol iprot = (com.jetbrains.cef.remote.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(2);
-        if (incoming.get(0)) {
-          struct.bid = iprot.readI32();
-          struct.setBidIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.hidden = iprot.readBool();
-          struct.setHiddenIsSet(true);
         }
       }
     }
