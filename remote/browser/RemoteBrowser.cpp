@@ -82,6 +82,7 @@ namespace {
     settings.windowless_frame_rate = windowlessFrameRate;
     CefWindowInfo windowInfo;
     windowInfo.SetAsWindowless(0);
+    windowInfo.external_begin_frame_enabled = true;
     windowInfo.shared_texture_enabled = sharedTexturesEnabled;
     // JCEF requires Alloy runtime style for "normal" browsers in order for them
     // to be integratable into Java UI.
